@@ -103,7 +103,6 @@ public:
                 if(params.robust_kernel_projection != "NONE") {
                     g2o::RobustKernel* kernel = kernel_factory->construct(params.robust_kernel_projection);
                     if(kernel == nullptr) {
-                        std::cerr << "invalid kernel name!!" << std::endl;
                         return false;
                     }
                     kernel->setDelta(params.robust_kernel_projection_delta);
@@ -113,17 +112,9 @@ public:
             }
         }
 
-        std::cout << "optimizing..." << std::endl;
-
         int max_iterations = params.num_iterations;
         graph->initializeOptimization();
         graph->setVerbose(false);
-
-        double chi2 = graph->chi2();
-        int iterations = graph->optimize(max_iterations);
-
-        std::cout << "iterations: " << iterations << "/" << max_iterations << std::endl;
-        std::cout << "chi2: (before)" << chi2 << " -> (after)" << graph->chi2() << std::endl;
 
         hand2eye = hand2eye_vertex->estimate();
         object2world = object2world_vertex->estimate();
@@ -135,7 +126,6 @@ private:
     g2o::SparseOptimizer* initialize_graph(const std::string& solver_name = "lm_var_cholmod") {
         g2o::SparseOptimizer* graph = new g2o::SparseOptimizer();
 
-        std::cout << "construct solver... " << std::flush;
         g2o::OptimizationAlgorithmFactory* solver_factory = g2o::OptimizationAlgorithmFactory::instance();
         g2o::OptimizationAlgorithmProperty solver_property;
         g2o::OptimizationAlgorithm* solver = solver_factory->construct(solver_name, solver_property);
@@ -151,12 +141,10 @@ private:
             return nullptr;
         }
 
-        std::cout << "done" << std::endl;
         return graph;
     }
 
     bool install_parameters(const Eigen::Matrix3d& camera_matrix, const Eigen::MatrixXd& pattern_3d) {
-        std::cout << "installing parameters... " << std::flush;
 
         g2o::ParameterCamera* camera_param = new g2o::ParameterCamera();
         camera_param->setId(0);
@@ -172,7 +160,7 @@ private:
                 return false;
             }
         }
-        std::cout << "done" << std::endl;
+
         return true;
     }
 private:

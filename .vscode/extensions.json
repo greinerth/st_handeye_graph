@@ -1,0 +1,9 @@
+{
+    "recommendations": [
+        "ms-vscode.cpptools-extension-pack",
+        "cs128.cs128-clang-tidy",
+        "ms-python.python",
+        "charliermarsh.ruff",
+        "njpwerner.autodocstring"
+    ]
+}

@@ -9,7 +9,8 @@
 
 #include <visp/vpDebug.h>
 #include <visp/vpPoint.h>
-#include <visp/vpCalibration.h>
+
+#include <visp/vpHandEyeCalibration.h>
 #include <visp/vpExponentialMap.h>
 
 #include <st_handeye/st_handeye.hpp>
@@ -108,7 +109,7 @@ bool spatial_calibration_visp (
     }
 
     vpHomogeneousMatrix vp_hand2eye = eigen2vpmat(hand2eye.matrix());
-    vpCalibration::calibrationTsai(vp_eye2objects, vp_world2hands, vp_hand2eye);
+    vpHandEyeCalibration::calibrate(vp_eye2objects, vp_world2hands, vp_hand2eye);
 
     Eigen::Matrix4d hand2eye_ = vpmat2eigen(vp_hand2eye).inverse();
     hand2eye.translation() = hand2eye_.block<3, 1>(0, 3);
